@@ -88,10 +88,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:title", content: "Spread Business ERP & CRM" },
       {
         property: "og:description",
-        content: "Premium cloud ERP & CRM for printing operations.",
+        content: "Cloud ERP & CRM for Spread Business Pvt Limited — manage customers, orders, production, and reports from one professional dashboard.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "Spread Business ERP & CRM" },
+      { name: "twitter:description", content: "Cloud ERP & CRM for Spread Business Pvt Limited — manage customers, orders, production, and reports from one professional dashboard." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/c40fd7fa-27f0-407f-bbc9-095e7421498b/id-preview-777e34c6--f89616b3-7095-4cb5-8d0b-ee6b97d6ccaf.lovable.app-1783536139828.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/c40fd7fa-27f0-407f-bbc9-095e7421498b/id-preview-777e34c6--f89616b3-7095-4cb5-8d0b-ee6b97d6ccaf.lovable.app-1783536139828.png" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
