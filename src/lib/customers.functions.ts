@@ -58,7 +58,12 @@ export const createCustomer = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d: unknown) => CustomerInput.parse(d))
   .handler(async ({ data, context }) => {
-    const payload = { ...data, email: data.email || null, created_by: context.userId };
+    const payload = {
+      ...data,
+      email: data.email || null,
+      created_by: context.userId,
+      customer_code: "",
+    };
     const { data: row, error } = await context.supabase
       .from("customers")
       .insert(payload)
