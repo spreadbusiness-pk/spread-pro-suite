@@ -17,6 +17,7 @@ import { Route as AuthenticatedUsersRouteImport } from './routes/_authenticated/
 import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
 import { Route as AuthenticatedQuotationsRouteImport } from './routes/_authenticated/quotations'
 import { Route as AuthenticatedOrdersRouteImport } from './routes/_authenticated/orders'
+import { Route as AuthenticatedInvoicesRouteImport } from './routes/_authenticated/invoices'
 import { Route as AuthenticatedCustomersRouteImport } from './routes/_authenticated/customers'
 
 const ResetPasswordRoute = ResetPasswordRouteImport.update({
@@ -58,6 +59,11 @@ const AuthenticatedOrdersRoute = AuthenticatedOrdersRouteImport.update({
   path: '/orders',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedInvoicesRoute = AuthenticatedInvoicesRouteImport.update({
+  id: '/invoices',
+  path: '/invoices',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedCustomersRoute = AuthenticatedCustomersRouteImport.update({
   id: '/customers',
   path: '/customers',
@@ -69,6 +75,7 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/reset-password': typeof ResetPasswordRoute
   '/customers': typeof AuthenticatedCustomersRoute
+  '/invoices': typeof AuthenticatedInvoicesRoute
   '/orders': typeof AuthenticatedOrdersRoute
   '/quotations': typeof AuthenticatedQuotationsRoute
   '/settings': typeof AuthenticatedSettingsRoute
@@ -78,6 +85,7 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/reset-password': typeof ResetPasswordRoute
   '/customers': typeof AuthenticatedCustomersRoute
+  '/invoices': typeof AuthenticatedInvoicesRoute
   '/orders': typeof AuthenticatedOrdersRoute
   '/quotations': typeof AuthenticatedQuotationsRoute
   '/settings': typeof AuthenticatedSettingsRoute
@@ -90,6 +98,7 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/reset-password': typeof ResetPasswordRoute
   '/_authenticated/customers': typeof AuthenticatedCustomersRoute
+  '/_authenticated/invoices': typeof AuthenticatedInvoicesRoute
   '/_authenticated/orders': typeof AuthenticatedOrdersRoute
   '/_authenticated/quotations': typeof AuthenticatedQuotationsRoute
   '/_authenticated/settings': typeof AuthenticatedSettingsRoute
@@ -103,6 +112,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/reset-password'
     | '/customers'
+    | '/invoices'
     | '/orders'
     | '/quotations'
     | '/settings'
@@ -112,6 +122,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/reset-password'
     | '/customers'
+    | '/invoices'
     | '/orders'
     | '/quotations'
     | '/settings'
@@ -123,6 +134,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/reset-password'
     | '/_authenticated/customers'
+    | '/_authenticated/invoices'
     | '/_authenticated/orders'
     | '/_authenticated/quotations'
     | '/_authenticated/settings'
@@ -194,6 +206,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedOrdersRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/invoices': {
+      id: '/_authenticated/invoices'
+      path: '/invoices'
+      fullPath: '/invoices'
+      preLoaderRoute: typeof AuthenticatedInvoicesRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/customers': {
       id: '/_authenticated/customers'
       path: '/customers'
@@ -206,6 +225,7 @@ declare module '@tanstack/react-router' {
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedCustomersRoute: typeof AuthenticatedCustomersRoute
+  AuthenticatedInvoicesRoute: typeof AuthenticatedInvoicesRoute
   AuthenticatedOrdersRoute: typeof AuthenticatedOrdersRoute
   AuthenticatedQuotationsRoute: typeof AuthenticatedQuotationsRoute
   AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
@@ -215,6 +235,7 @@ interface AuthenticatedRouteRouteChildren {
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedCustomersRoute: AuthenticatedCustomersRoute,
+  AuthenticatedInvoicesRoute: AuthenticatedInvoicesRoute,
   AuthenticatedOrdersRoute: AuthenticatedOrdersRoute,
   AuthenticatedQuotationsRoute: AuthenticatedQuotationsRoute,
   AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
