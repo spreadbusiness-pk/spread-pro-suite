@@ -229,8 +229,11 @@ export const getOrderDashboard = createServerFn({ method: "GET" })
       sb.from("orders").select("id", { count: "exact", head: true }).eq("order_date", today),
       sb.from("orders").select("id", { count: "exact", head: true }).eq("status", "delivered").gte("updated_at", `${today}T00:00:00Z`),
       sb.from("orders").select("branch_id,selling_price,net_profit,branch:branches(name,code)"),
-      sb.from("papers").select("id,name,current_stock,minimum_stock").filter("current_stock", "lte", "minimum_stock" as any),
+      sb.from("papers").select("id,name,current_stock,minimum_stock"),
     ]);
+    const lowStock = ((lowStockRes.data ?? []) as any[]).filter(
+      (p) => Number(p.current_stock ?? 0) <= Number(p.minimum_stock ?? 0) && Number(p.minimum_stock ?? 0) > 0,
+    );
     const branchAgg: Record<string, { name: string; code: string; orders: number; revenue: number; profit: number }> = {};
     for (const r of (byBranchRes.data ?? []) as any[]) {
       const key = r.branch_id ?? "unassigned";
