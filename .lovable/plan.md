@@ -1,73 +1,96 @@
-# Spread Business ERP & CRM — Phase 1 Plan
+# Spread Business ERP — Phase 2 Plan
 
-Build the foundation of a real, extensible ERP/CRM (not a demo). Phase 1 focuses on: branding/design system, auth with roles, customer management (full CRUD), company settings, dashboard shell, and the sidebar navigation for future phases.
+Extend the existing Phase 1 foundation into a full printing & packaging ERP with multi-branch, order management, and a costing engine. All existing pages, auth, RLS patterns and design system stay intact.
 
-## 1. Backend (Lovable Cloud / Supabase)
+## 1. Database (single migration)
 
-Enable Lovable Cloud, then create schema via migration:
+New tables (all with RLS + GRANTs, `branch_id` scoping where applicable, `has_branch_access()` security-definer helper):
 
-- `app_role` enum: `super_admin | admin | sales | designer | production | delivery | accountant`
-- `profiles` (id → auth.users, full_name, phone, avatar_url, created_at)
-- `user_roles` (id, user_id, role) + `has_role()` security-definer
-- `customers` (id, customer_code, company_name, customer_name, mobile, whatsapp, email, address, city, business_type, gst_ntn, notes, status, created_by, created_at, updated_at)
-- `company_settings` (singleton row: logo_url, name, phone, whatsapp, email, website, address, currency, timezone)
-- RLS + GRANTs for all tables
-- Auto-create profile trigger on signup; first signup becomes `super_admin`
-- Storage buckets: `avatars`, `company-assets`
+- `branches` — code, name, address, city, phone, whatsapp, email, manager_id, currency, status, active
+- `user_branches` — user_id, branch_id (many-to-many; super_admin sees all)
+- `product_categories` and `products` — category, name, description, default_unit, default_formula (jsonb), active
+- `machines` — name, type, manufacturer, model, colors, min/max sheet size, speed, setup_time, cost_per_hour, cost_per_sheet, electricity_cost, maintenance_cost, status, branch_id
+- `papers` — name, brand, gsm, sheet_size, purchase_rate, selling_rate, current_stock, min_stock, branch_id
+- `ctp_plates` — name, size, cost, supplier
+- `finishing_options` — name, rate, unit, active
+- `binding_options` — name, rate, unit, active
+- `labour_rates` — type, rate, unit
+- `transport_rates` — type, rate, unit
+- `orders` — order_no (auto `SP-<BRANCHCODE>-000001` via sequence-per-branch), branch_id, customer_id, quotation_ref, sales_person_id, order_date, delivery_date, priority, status, customer_remarks, internal_notes, totals (paper/ctp/print/ink/finishing/binding/labour/transport/misc costs, total_cost, profit_pct, selling_price, net_profit), created_by
+- `order_items` — order_id, product_id, qty, specs (jsonb: size, colors, sides, gsm, paper_id, machine_id, plates, finishings[], bindings[]), line totals
+- `order_files` — order_id, path, filename, mime, size, uploaded_by
+- `order_timeline` — order_id, status, note, actor_id, created_at
 
-## 2. Design System (`src/styles.css`)
+Existing tables get a nullable `branch_id` column (backfill left to admin) and updated RLS: super_admin/admin see all, others limited to `has_branch_access(branch_id)`.
 
-Luxury corporate tokens in oklch:
-- Primary `#0B2F7A`, Secondary `#071B4A`, Gold accent `#D4AF37`
-- Glass surfaces (`--glass-bg`, `--glass-border`), soft elevation shadows, gold gradient token
-- Full light + dark palettes; radius scale bumped for rounded cards
-- Serif display font (Playfair Display) + Inter body via `<link>` in `__root.tsx`
+Storage bucket `order-files` (private) for artwork uploads (PDF/AI/CDR/PSD/EPS/JPG/PNG/ZIP).
 
-## 3. Routes
+Auto order number via `nextval('order_seq_' || branch_code)` created lazily by trigger.
 
+## 2. Server functions (`src/lib/*.functions.ts`)
+
+All under `requireSupabaseAuth`:
+- `branches.functions.ts` — list/get/create/update/delete/toggle
+- `masters.functions.ts` — CRUD for products, categories, machines, papers, plates, finishings, bindings, labour, transport
+- `orders.functions.ts` — list (filters: branch/status/customer/date/priority/search), get, create, update, delete, duplicate, updateStatus, uploadFile, listFiles
+- `costing.ts` — pure helpers computing cost breakdown from order_items + master rates (called client + server)
+- `dashboard.functions.ts` — extended with branch-scoped metrics
+
+## 3. Routes / UI
+
+New under `_authenticated/`:
+- `branches/` — list + sheet form (admin only)
+- `masters/` — tabbed page: Products, Machines, Papers, CTP, Finishing, Binding, Labour, Transport
+- `orders/` — list with advanced filters, pagination, search
+- `orders/new` — full order builder (branch → customer → items → specs → live costing panel → files → save)
+- `orders/$id` — details, edit, duplicate, print job card, artwork upload, timeline, status changer
+- Update `dashboard` (index) — branch selector + branch-wise sales/orders/revenue/profit cards, pending orders, machine utilization, today's production/delivery, low stock alerts, Recharts breakdown
+
+Existing customers/settings/users pages get an optional `branch_id` field.
+
+Sidebar gets: Branches, Masters (grouped), and expanded Orders.
+
+## 4. Costing engine
+
+Client-side reactive calculator on the order form:
 ```
-/auth                      sign in / sign up / forgot password
-/reset-password            recovery flow
-/_authenticated/           protected layout (managed)
-  index                    dashboard
-  customers                list + search + filter + pagination
-  customers/new
-  customers/$id            details + edit
-  orders                   Phase 2 placeholder page
-  quotations               Phase 2 placeholder
-  invoices                 Phase 2 placeholder
-  production               Phase 2 placeholder
-  inventory                Phase 2 placeholder
-  reports                  Phase 2 placeholder
-  users                    admin-only: list users + assign roles
-  settings                 company settings + profile + change password
+paperCost   = sheets * paper.purchase_rate
+ctpCost     = plates * ctp.cost
+printCost   = impressions * machine.cost_per_sheet + setup_hours * machine.cost_per_hour
+finishing   = Σ finishing.rate * qty
+binding     = Σ binding.rate * qty
+labour      = Σ labour.rate * hours
+transport   = Σ transport.rate
+misc        = user input
+total       = sum(above)
+selling     = total * (1 + profit_pct/100)   OR   user-set price
+net_profit  = selling - total
 ```
+Stored on the order row; recomputed on save server-side to prevent tampering.
 
-Phase-2 pages ship as clean "Coming in Phase 2" screens with the sidebar wired so future work drops in.
+## 5. File uploads
 
-## 4. UI Shell
+Private `order-files` bucket, signed URLs. Client accepts the listed extensions, 25 MB per file cap.
 
-- `AppSidebar` (shadcn sidebar, collapsible icon mode, gold active accent, role-aware items)
-- Topbar: search, theme toggle (light/dark), notifications placeholder, profile menu
-- Dashboard cards: Today's Orders, Pending, Completed, Monthly Sales, Today's Revenue, Pending Payments, Total Customers (Phase 1 shows real customer count + zeroed metrics with tooltips "activates in Phase 2"), Recent Activity, Monthly Sales chart (Recharts), Quick Actions
-- Customers: table with search/filter/pagination, add/edit sheet, detail drawer, delete confirm
-- Settings: company form + logo upload + profile + change password
-- Skeletons, toasts (sonner), confirm dialogs (AlertDialog)
+## 6. Job Card
 
-## 5. Server Functions
+Printable A4 view at `/orders/$id/job-card` (route + `window.print()`), showing full specs, materials, machine, finishings, cost summary, delivery info.
 
-- `listCustomers`, `getCustomer`, `createCustomer`, `updateCustomer`, `deleteCustomer` — `requireSupabaseAuth`
-- `getCompanySettings`, `updateCompanySettings` — admin-only
-- `listUsers`, `assignRole` — super_admin/admin only
-- `getDashboardStats` — customer count now; extensible for orders/revenue
+## 7. Order status pipeline
 
-## 6. Deploy
+Enum `order_status` with the 15 states from the spec. Timeline auto-writes on every status change (actor + note).
 
-Final message includes: publish via Publish button, connect custom domain, first user auto-promoted to super_admin, how to add other users.
+## 8. Access rules
 
-## Notes
-- No demo data seeded — real empty state.
-- Google sign-in NOT added (spec asks for email login + forgot password only).
-- Everything typed, RLS enforced, keys/roles never client-trusted.
+- `super_admin` / `admin`: all branches
+- Branch manager (new `branch_manager` role added to `app_role`) + staff: only rows where `branch_id` is in their `user_branches`
+- All new tables enforce this via `has_branch_access(branch_id)` security-definer function
 
-Confirm and I'll build.
+## Notes / assumptions
+
+- No demo data seeded — real empty state; you create your first branch, then everything else.
+- Ink cost tracked as a line on order (no separate ink master this phase — can extend later).
+- Quotations page stays "coming soon" for now (order has a free-text `quotation_ref`); quotation module is a natural Phase 3.
+- Everything typed end-to-end, RLS enforced, keys/roles never trusted from client.
+
+Confirm and I'll build it in one pass.

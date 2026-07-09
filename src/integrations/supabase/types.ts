@@ -14,6 +14,87 @@ export type Database = {
   }
   public: {
     Tables: {
+      binding_options: {
+        Row: {
+          active: boolean
+          created_at: string
+          id: string
+          name: string
+          rate: number
+          unit: string
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          created_at?: string
+          id?: string
+          name: string
+          rate?: number
+          unit?: string
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          created_at?: string
+          id?: string
+          name?: string
+          rate?: number
+          unit?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      branches: {
+        Row: {
+          active: boolean
+          address: string | null
+          city: string | null
+          code: string
+          created_at: string
+          currency: string
+          email: string | null
+          id: string
+          manager_id: string | null
+          name: string
+          phone: string | null
+          status: string
+          updated_at: string
+          whatsapp: string | null
+        }
+        Insert: {
+          active?: boolean
+          address?: string | null
+          city?: string | null
+          code: string
+          created_at?: string
+          currency?: string
+          email?: string | null
+          id?: string
+          manager_id?: string | null
+          name: string
+          phone?: string | null
+          status?: string
+          updated_at?: string
+          whatsapp?: string | null
+        }
+        Update: {
+          active?: boolean
+          address?: string | null
+          city?: string | null
+          code?: string
+          created_at?: string
+          currency?: string
+          email?: string | null
+          id?: string
+          manager_id?: string | null
+          name?: string
+          phone?: string | null
+          status?: string
+          updated_at?: string
+          whatsapp?: string | null
+        }
+        Relationships: []
+      }
       company_settings: {
         Row: {
           address: string | null
@@ -59,9 +140,43 @@ export type Database = {
         }
         Relationships: []
       }
+      ctp_plates: {
+        Row: {
+          active: boolean
+          cost: number
+          created_at: string
+          id: string
+          name: string
+          plate_size: string | null
+          supplier: string | null
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          cost?: number
+          created_at?: string
+          id?: string
+          name: string
+          plate_size?: string | null
+          supplier?: string | null
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          cost?: number
+          created_at?: string
+          id?: string
+          name?: string
+          plate_size?: string | null
+          supplier?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       customers: {
         Row: {
           address: string | null
+          branch_id: string | null
           business_type: string | null
           city: string | null
           company_name: string
@@ -80,6 +195,7 @@ export type Database = {
         }
         Insert: {
           address?: string | null
+          branch_id?: string | null
           business_type?: string | null
           city?: string | null
           company_name: string
@@ -98,6 +214,7 @@ export type Database = {
         }
         Update: {
           address?: string | null
+          branch_id?: string | null
           business_type?: string | null
           city?: string | null
           company_name?: string
@@ -114,7 +231,496 @@ export type Database = {
           updated_at?: string
           whatsapp?: string | null
         }
+        Relationships: [
+          {
+            foreignKeyName: "customers_branch_id_fkey"
+            columns: ["branch_id"]
+            isOneToOne: false
+            referencedRelation: "branches"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      finishing_options: {
+        Row: {
+          active: boolean
+          created_at: string
+          id: string
+          name: string
+          rate: number
+          unit: string
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          created_at?: string
+          id?: string
+          name: string
+          rate?: number
+          unit?: string
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          created_at?: string
+          id?: string
+          name?: string
+          rate?: number
+          unit?: string
+          updated_at?: string
+        }
         Relationships: []
+      }
+      labour_rates: {
+        Row: {
+          active: boolean
+          created_at: string
+          id: string
+          labour_type: string
+          rate: number
+          unit: string
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          created_at?: string
+          id?: string
+          labour_type: string
+          rate?: number
+          unit?: string
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          created_at?: string
+          id?: string
+          labour_type?: string
+          rate?: number
+          unit?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      machines: {
+        Row: {
+          branch_id: string | null
+          colors: number | null
+          cost_per_hour: number
+          cost_per_sheet: number
+          created_at: string
+          electricity_cost: number
+          id: string
+          machine_type: string | null
+          maintenance_cost: number
+          manufacturer: string | null
+          max_sheet_size: string | null
+          min_sheet_size: string | null
+          model: string | null
+          name: string
+          setup_time: number | null
+          speed: number | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          branch_id?: string | null
+          colors?: number | null
+          cost_per_hour?: number
+          cost_per_sheet?: number
+          created_at?: string
+          electricity_cost?: number
+          id?: string
+          machine_type?: string | null
+          maintenance_cost?: number
+          manufacturer?: string | null
+          max_sheet_size?: string | null
+          min_sheet_size?: string | null
+          model?: string | null
+          name: string
+          setup_time?: number | null
+          speed?: number | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          branch_id?: string | null
+          colors?: number | null
+          cost_per_hour?: number
+          cost_per_sheet?: number
+          created_at?: string
+          electricity_cost?: number
+          id?: string
+          machine_type?: string | null
+          maintenance_cost?: number
+          manufacturer?: string | null
+          max_sheet_size?: string | null
+          min_sheet_size?: string | null
+          model?: string | null
+          name?: string
+          setup_time?: number | null
+          speed?: number | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "machines_branch_id_fkey"
+            columns: ["branch_id"]
+            isOneToOne: false
+            referencedRelation: "branches"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      order_files: {
+        Row: {
+          created_at: string
+          filename: string
+          id: string
+          mime: string | null
+          order_id: string
+          path: string
+          size: number | null
+          uploaded_by: string | null
+        }
+        Insert: {
+          created_at?: string
+          filename: string
+          id?: string
+          mime?: string | null
+          order_id: string
+          path: string
+          size?: number | null
+          uploaded_by?: string | null
+        }
+        Update: {
+          created_at?: string
+          filename?: string
+          id?: string
+          mime?: string | null
+          order_id?: string
+          path?: string
+          size?: number | null
+          uploaded_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "order_files_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      order_items: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          line_total: number
+          order_id: string
+          product_id: string | null
+          quantity: number
+          specs: Json
+          unit: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          line_total?: number
+          order_id: string
+          product_id?: string | null
+          quantity?: number
+          specs?: Json
+          unit?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          line_total?: number
+          order_id?: string
+          product_id?: string | null
+          quantity?: number
+          specs?: Json
+          unit?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "order_items_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "order_items_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      order_timeline: {
+        Row: {
+          actor_id: string | null
+          created_at: string
+          id: string
+          note: string | null
+          order_id: string
+          status: Database["public"]["Enums"]["order_status"] | null
+        }
+        Insert: {
+          actor_id?: string | null
+          created_at?: string
+          id?: string
+          note?: string | null
+          order_id: string
+          status?: Database["public"]["Enums"]["order_status"] | null
+        }
+        Update: {
+          actor_id?: string | null
+          created_at?: string
+          id?: string
+          note?: string | null
+          order_id?: string
+          status?: Database["public"]["Enums"]["order_status"] | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "order_timeline_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      orders: {
+        Row: {
+          binding_cost: number
+          branch_id: string | null
+          created_at: string
+          created_by: string | null
+          ctp_cost: number
+          customer_id: string | null
+          customer_remarks: string | null
+          delivery_date: string | null
+          finishing_cost: number
+          id: string
+          ink_cost: number
+          internal_notes: string | null
+          labour_cost: number
+          misc_cost: number
+          net_profit: number
+          order_date: string
+          order_no: string
+          paper_cost: number
+          printing_cost: number
+          priority: Database["public"]["Enums"]["order_priority"]
+          profit_pct: number
+          quotation_ref: string | null
+          sales_person_id: string | null
+          selling_price: number
+          status: Database["public"]["Enums"]["order_status"]
+          total_cost: number
+          transport_cost: number
+          updated_at: string
+        }
+        Insert: {
+          binding_cost?: number
+          branch_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          ctp_cost?: number
+          customer_id?: string | null
+          customer_remarks?: string | null
+          delivery_date?: string | null
+          finishing_cost?: number
+          id?: string
+          ink_cost?: number
+          internal_notes?: string | null
+          labour_cost?: number
+          misc_cost?: number
+          net_profit?: number
+          order_date?: string
+          order_no: string
+          paper_cost?: number
+          printing_cost?: number
+          priority?: Database["public"]["Enums"]["order_priority"]
+          profit_pct?: number
+          quotation_ref?: string | null
+          sales_person_id?: string | null
+          selling_price?: number
+          status?: Database["public"]["Enums"]["order_status"]
+          total_cost?: number
+          transport_cost?: number
+          updated_at?: string
+        }
+        Update: {
+          binding_cost?: number
+          branch_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          ctp_cost?: number
+          customer_id?: string | null
+          customer_remarks?: string | null
+          delivery_date?: string | null
+          finishing_cost?: number
+          id?: string
+          ink_cost?: number
+          internal_notes?: string | null
+          labour_cost?: number
+          misc_cost?: number
+          net_profit?: number
+          order_date?: string
+          order_no?: string
+          paper_cost?: number
+          printing_cost?: number
+          priority?: Database["public"]["Enums"]["order_priority"]
+          profit_pct?: number
+          quotation_ref?: string | null
+          sales_person_id?: string | null
+          selling_price?: number
+          status?: Database["public"]["Enums"]["order_status"]
+          total_cost?: number
+          transport_cost?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "orders_branch_id_fkey"
+            columns: ["branch_id"]
+            isOneToOne: false
+            referencedRelation: "branches"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "orders_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "customers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      papers: {
+        Row: {
+          branch_id: string | null
+          brand: string | null
+          created_at: string
+          current_stock: number
+          gsm: number | null
+          id: string
+          minimum_stock: number
+          name: string
+          purchase_rate: number
+          selling_rate: number
+          sheet_size: string | null
+          updated_at: string
+        }
+        Insert: {
+          branch_id?: string | null
+          brand?: string | null
+          created_at?: string
+          current_stock?: number
+          gsm?: number | null
+          id?: string
+          minimum_stock?: number
+          name: string
+          purchase_rate?: number
+          selling_rate?: number
+          sheet_size?: string | null
+          updated_at?: string
+        }
+        Update: {
+          branch_id?: string | null
+          brand?: string | null
+          created_at?: string
+          current_stock?: number
+          gsm?: number | null
+          id?: string
+          minimum_stock?: number
+          name?: string
+          purchase_rate?: number
+          selling_rate?: number
+          sheet_size?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "papers_branch_id_fkey"
+            columns: ["branch_id"]
+            isOneToOne: false
+            referencedRelation: "branches"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      product_categories: {
+        Row: {
+          created_at: string
+          id: string
+          name: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          name: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          name?: string
+        }
+        Relationships: []
+      }
+      products: {
+        Row: {
+          active: boolean
+          category_id: string | null
+          created_at: string
+          default_formula: Json
+          default_unit: string
+          description: string | null
+          id: string
+          name: string
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          category_id?: string | null
+          created_at?: string
+          default_formula?: Json
+          default_unit?: string
+          description?: string | null
+          id?: string
+          name: string
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          category_id?: string | null
+          created_at?: string
+          default_formula?: Json
+          default_unit?: string
+          description?: string | null
+          id?: string
+          name?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "products_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "product_categories"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       profiles: {
         Row: {
@@ -143,6 +749,65 @@ export type Database = {
         }
         Relationships: []
       }
+      transport_rates: {
+        Row: {
+          active: boolean
+          created_at: string
+          id: string
+          rate: number
+          transport_type: string
+          unit: string
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          created_at?: string
+          id?: string
+          rate?: number
+          transport_type: string
+          unit?: string
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          created_at?: string
+          id?: string
+          rate?: number
+          transport_type?: string
+          unit?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      user_branches: {
+        Row: {
+          branch_id: string
+          created_at: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          branch_id: string
+          created_at?: string
+          id?: string
+          user_id: string
+        }
+        Update: {
+          branch_id?: string
+          created_at?: string
+          id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_branches_branch_id_fkey"
+            columns: ["branch_id"]
+            isOneToOne: false
+            referencedRelation: "branches"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_roles: {
         Row: {
           created_at: string
@@ -169,6 +834,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      has_branch_access: {
+        Args: { _branch_id: string; _user_id: string }
+        Returns: boolean
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -187,6 +856,24 @@ export type Database = {
         | "production"
         | "delivery"
         | "accountant"
+        | "branch_manager"
+      order_priority: "low" | "normal" | "high" | "urgent"
+      order_status:
+        | "new"
+        | "artwork_pending"
+        | "design"
+        | "customer_approval"
+        | "plate_making"
+        | "printing"
+        | "cutting"
+        | "lamination"
+        | "uv"
+        | "foiling"
+        | "binding"
+        | "packing"
+        | "ready"
+        | "delivered"
+        | "cancelled"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -322,6 +1009,25 @@ export const Constants = {
         "production",
         "delivery",
         "accountant",
+        "branch_manager",
+      ],
+      order_priority: ["low", "normal", "high", "urgent"],
+      order_status: [
+        "new",
+        "artwork_pending",
+        "design",
+        "customer_approval",
+        "plate_making",
+        "printing",
+        "cutting",
+        "lamination",
+        "uv",
+        "foiling",
+        "binding",
+        "packing",
+        "ready",
+        "delivered",
+        "cancelled",
       ],
     },
   },
