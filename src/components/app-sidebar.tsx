@@ -10,6 +10,8 @@ import {
   BarChart3,
   UserCog,
   Settings,
+  Building2,
+  Database,
 } from "lucide-react";
 import {
   Sidebar,
@@ -27,8 +29,8 @@ import {
 
 const mainItems = [
   { title: "Dashboard", url: "/", icon: LayoutDashboard },
-  { title: "Customers", url: "/customers", icon: Users },
   { title: "Orders", url: "/orders", icon: ShoppingCart },
+  { title: "Customers", url: "/customers", icon: Users },
   { title: "Quotations", url: "/quotations", icon: FileText },
   { title: "Invoices", url: "/invoices", icon: Receipt },
   { title: "Production", url: "/production", icon: Factory },
@@ -37,6 +39,8 @@ const mainItems = [
 ] as const;
 
 const adminItems = [
+  { title: "Branches", url: "/branches", icon: Building2 },
+  { title: "Masters", url: "/masters", icon: Database },
   { title: "Users", url: "/users", icon: UserCog },
   { title: "Settings", url: "/settings", icon: Settings },
 ] as const;
