@@ -248,6 +248,6 @@ export const getOrderDashboard = createServerFn({ method: "GET" })
       todayOrders: todayRes.count ?? 0,
       deliveredToday: deliveredTodayRes.count ?? 0,
       branches: Object.values(branchAgg),
-      lowStock: (lowStockRes.data ?? []) as any[],
+      lowStock,
     };
   });
