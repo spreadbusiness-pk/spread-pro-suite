@@ -162,6 +162,11 @@ function MasterTable({ spec }: { spec: MasterSpec }) {
     queryFn: () => listFn({ data: { table: "papers" } }),
     enabled: spec.fields.some((f) => f.type === "paperType" || f.type === "paperGsm"),
   });
+  const machinesQ = useQuery({
+    queryKey: ["master", "machines"],
+    queryFn: () => listFn({ data: { table: "machines" } }),
+    enabled: spec.fields.some((f) => f.type === "machine"),
+  });
 
   const [sheet, setSheet] = useState(false);
   const [editing, setEditing] = useState<any>(null);
