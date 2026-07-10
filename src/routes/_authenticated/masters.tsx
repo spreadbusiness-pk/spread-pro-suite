@@ -260,6 +260,11 @@ function MasterTable({ spec }: { spec: MasterSpec }) {
                       <SelectTrigger><SelectValue placeholder="Select GSM" /></SelectTrigger>
                       <SelectContent>{Array.from(new Set(((papersQ.data ?? []) as any[]).map((p) => p.gsm).filter((g) => g != null))).sort((a: any, b: any) => a - b).map((g) => <SelectItem key={String(g)} value={String(g)}>{String(g)}</SelectItem>)}</SelectContent>
                     </Select>
+                  ) : f.type === "machine" ? (
+                    <Select value={form[f.key] ?? ""} onValueChange={(v) => setForm({ ...form, [f.key]: v })}>
+                      <SelectTrigger><SelectValue placeholder="Select machine" /></SelectTrigger>
+                      <SelectContent>{((machinesQ.data ?? []) as any[]).map((m) => <SelectItem key={m.id} value={m.id}>{m.name}</SelectItem>)}</SelectContent>
+                    </Select>
                   ) : f.type === "textarea" ? (
                     <textarea className="min-h-[80px] w-full rounded-md border bg-background px-3 py-2 text-sm" value={form[f.key] ?? ""} onChange={(e) => setForm({ ...form, [f.key]: e.target.value })} />
                   ) : (
