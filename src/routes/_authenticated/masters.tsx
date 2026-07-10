@@ -22,7 +22,7 @@ import { listBranches } from "@/lib/branches.functions";
 
 export const Route = createFileRoute("/_authenticated/masters")({ component: MastersPage });
 
-type FieldDef = { key: string; label: string; type?: "text" | "number" | "textarea" | "select" | "branch" | "category" | "paperType" | "paperGsm"; options?: string[]; required?: boolean };
+type FieldDef = { key: string; label: string; type?: "text" | "number" | "textarea" | "select" | "branch" | "category" | "paperType" | "paperGsm" | "machine"; options?: string[]; required?: boolean };
 type MasterSpec = {
   table: "products" | "product_categories" | "machines" | "papers" | "ctp_plates" | "finishing_options" | "binding_options" | "labour_rates" | "transport_rates";
   label: string;
@@ -33,12 +33,14 @@ type MasterSpec = {
 const SPECS: MasterSpec[] = [
   {
     table: "products", label: "Products",
-    cols: ["name", "paper_type", "paper_gsm", "active"],
+    cols: ["name", "product_size", "paper_type", "paper_gsm", "active"],
     fields: [
       { key: "category_id", label: "Category", type: "category" },
       { key: "name", label: "Name", required: true },
+      { key: "product_size", label: "Product Size" },
       { key: "paper_type", label: "Paper Type", type: "paperType" },
       { key: "paper_gsm", label: "Paper GSM", type: "paperGsm" },
+      { key: "default_machine_id", label: "Default Machine", type: "machine" },
     ],
   },
   {
@@ -160,6 +162,11 @@ function MasterTable({ spec }: { spec: MasterSpec }) {
     queryFn: () => listFn({ data: { table: "papers" } }),
     enabled: spec.fields.some((f) => f.type === "paperType" || f.type === "paperGsm"),
   });
+  const machinesQ = useQuery({
+    queryKey: ["master", "machines"],
+    queryFn: () => listFn({ data: { table: "machines" } }),
+    enabled: spec.fields.some((f) => f.type === "machine"),
+  });
 
   const [sheet, setSheet] = useState(false);
   const [editing, setEditing] = useState<any>(null);
@@ -252,6 +259,11 @@ function MasterTable({ spec }: { spec: MasterSpec }) {
                     <Select value={form[f.key] != null ? String(form[f.key]) : ""} onValueChange={(v) => setForm({ ...form, [f.key]: Number(v) })}>
                       <SelectTrigger><SelectValue placeholder="Select GSM" /></SelectTrigger>
                       <SelectContent>{Array.from(new Set(((papersQ.data ?? []) as any[]).map((p) => p.gsm).filter((g) => g != null))).sort((a: any, b: any) => a - b).map((g) => <SelectItem key={String(g)} value={String(g)}>{String(g)}</SelectItem>)}</SelectContent>
+                    </Select>
+                  ) : f.type === "machine" ? (
+                    <Select value={form[f.key] ?? ""} onValueChange={(v) => setForm({ ...form, [f.key]: v })}>
+                      <SelectTrigger><SelectValue placeholder="Select machine" /></SelectTrigger>
+                      <SelectContent>{((machinesQ.data ?? []) as any[]).map((m) => <SelectItem key={m.id} value={m.id}>{m.name}</SelectItem>)}</SelectContent>
                     </Select>
                   ) : f.type === "textarea" ? (
                     <textarea className="min-h-[80px] w-full rounded-md border bg-background px-3 py-2 text-sm" value={form[f.key] ?? ""} onChange={(e) => setForm({ ...form, [f.key]: e.target.value })} />

@@ -17,6 +17,7 @@ const OrderInput = z.object({
   paper_cost: z.number().default(0),
   ctp_cost: z.number().default(0),
   printing_cost: z.number().default(0),
+  die_cutting_cost: z.number().default(0),
   ink_cost: z.number().default(0),
   finishing_cost: z.number().default(0),
   binding_cost: z.number().default(0),

@@ -509,6 +509,7 @@ export type Database = {
           customer_id: string | null
           customer_remarks: string | null
           delivery_date: string | null
+          die_cutting_cost: number
           finishing_cost: number
           id: string
           ink_cost: number
@@ -539,6 +540,7 @@ export type Database = {
           customer_id?: string | null
           customer_remarks?: string | null
           delivery_date?: string | null
+          die_cutting_cost?: number
           finishing_cost?: number
           id?: string
           ink_cost?: number
@@ -569,6 +571,7 @@ export type Database = {
           customer_id?: string | null
           customer_remarks?: string | null
           delivery_date?: string | null
+          die_cutting_cost?: number
           finishing_cost?: number
           id?: string
           ink_cost?: number
@@ -684,12 +687,14 @@ export type Database = {
           category_id: string | null
           created_at: string
           default_formula: Json
+          default_machine_id: string | null
           default_unit: string
           description: string | null
           id: string
           name: string
           paper_gsm: number | null
           paper_type: string | null
+          product_size: string | null
           updated_at: string
         }
         Insert: {
@@ -697,12 +702,14 @@ export type Database = {
           category_id?: string | null
           created_at?: string
           default_formula?: Json
+          default_machine_id?: string | null
           default_unit?: string
           description?: string | null
           id?: string
           name: string
           paper_gsm?: number | null
           paper_type?: string | null
+          product_size?: string | null
           updated_at?: string
         }
         Update: {
@@ -710,12 +717,14 @@ export type Database = {
           category_id?: string | null
           created_at?: string
           default_formula?: Json
+          default_machine_id?: string | null
           default_unit?: string
           description?: string | null
           id?: string
           name?: string
           paper_gsm?: number | null
           paper_type?: string | null
+          product_size?: string | null
           updated_at?: string
         }
         Relationships: [
@@ -724,6 +733,13 @@ export type Database = {
             columns: ["category_id"]
             isOneToOne: false
             referencedRelation: "product_categories"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "products_default_machine_id_fkey"
+            columns: ["default_machine_id"]
+            isOneToOne: false
+            referencedRelation: "machines"
             referencedColumns: ["id"]
           },
         ]
