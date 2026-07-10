@@ -175,7 +175,7 @@ function MasterTable({ spec }: { spec: MasterSpec }) {
       for (const f of spec.fields) {
         const v = form[f.key];
         if (v === undefined || v === "") { clean[f.key] = null; continue; }
-        clean[f.key] = f.type === "number" ? Number(v) : v;
+        clean[f.key] = (f.type === "number" || f.type === "paperGsm") ? Number(v) : v;
       }
       return upsertFn({ data: { table: spec.table, id: editing?.id ?? null, values: clean } });
     },
