@@ -22,7 +22,7 @@ import { listBranches } from "@/lib/branches.functions";
 
 export const Route = createFileRoute("/_authenticated/masters")({ component: MastersPage });
 
-type FieldDef = { key: string; label: string; type?: "text" | "number" | "textarea" | "select" | "branch" | "category"; options?: string[]; required?: boolean };
+type FieldDef = { key: string; label: string; type?: "text" | "number" | "textarea" | "select" | "branch" | "category" | "paperType" | "paperGsm"; options?: string[]; required?: boolean };
 type MasterSpec = {
   table: "products" | "product_categories" | "machines" | "papers" | "ctp_plates" | "finishing_options" | "binding_options" | "labour_rates" | "transport_rates";
   label: string;
@@ -33,47 +33,36 @@ type MasterSpec = {
 const SPECS: MasterSpec[] = [
   {
     table: "products", label: "Products",
-    cols: ["name", "default_unit", "active"],
+    cols: ["name", "paper_type", "paper_gsm", "active"],
     fields: [
       { key: "category_id", label: "Category", type: "category" },
       { key: "name", label: "Name", required: true },
-      { key: "description", label: "Description", type: "textarea" },
-      { key: "default_unit", label: "Default unit" },
+      { key: "paper_type", label: "Paper Type", type: "paperType" },
+      { key: "paper_gsm", label: "Paper GSM", type: "paperGsm" },
     ],
   },
   {
     table: "machines", label: "Machines",
-    cols: ["name", "machine_type", "cost_per_hour", "cost_per_sheet"],
+    cols: ["name", "machine_type", "model", "colors", "cost_per_hour"],
     fields: [
-      { key: "branch_id", label: "Branch", type: "branch" },
-      { key: "name", label: "Name", required: true },
-      { key: "machine_type", label: "Type" },
-      { key: "manufacturer", label: "Manufacturer" },
+      { key: "name", label: "Machine Name", required: true },
+      { key: "machine_type", label: "Machine Type" },
       { key: "model", label: "Model" },
       { key: "colors", label: "Colors", type: "number" },
       { key: "max_sheet_size", label: "Max sheet size" },
       { key: "min_sheet_size", label: "Min sheet size" },
-      { key: "speed", label: "Speed", type: "number" },
-      { key: "setup_time", label: "Setup time", type: "number" },
-      { key: "cost_per_hour", label: "Cost/hour", type: "number" },
-      { key: "cost_per_sheet", label: "Cost/sheet", type: "number" },
-      { key: "electricity_cost", label: "Electricity cost", type: "number" },
-      { key: "maintenance_cost", label: "Maintenance cost", type: "number" },
+      { key: "cost_per_hour", label: "Cost Per Color", type: "number" },
     ],
   },
   {
     table: "papers", label: "Paper",
-    cols: ["name", "brand", "gsm", "sheet_size", "current_stock"],
+    cols: ["name", "brand", "gsm", "sheet_size", "purchase_rate"],
     fields: [
-      { key: "branch_id", label: "Branch", type: "branch" },
-      { key: "name", label: "Name", required: true },
+      { key: "name", label: "Paper Name", required: true },
       { key: "brand", label: "Brand" },
       { key: "gsm", label: "GSM", type: "number" },
       { key: "sheet_size", label: "Sheet size" },
       { key: "purchase_rate", label: "Purchase rate", type: "number" },
-      { key: "selling_rate", label: "Selling rate", type: "number" },
-      { key: "current_stock", label: "Current stock", type: "number" },
-      { key: "minimum_stock", label: "Minimum stock", type: "number" },
     ],
   },
   {
@@ -166,6 +155,11 @@ function MasterTable({ spec }: { spec: MasterSpec }) {
     queryFn: () => listFn({ data: { table: "product_categories" } }),
     enabled: spec.fields.some((f) => f.type === "category"),
   });
+  const papersQ = useQuery({
+    queryKey: ["master", "papers"],
+    queryFn: () => listFn({ data: { table: "papers" } }),
+    enabled: spec.fields.some((f) => f.type === "paperType" || f.type === "paperGsm"),
+  });
 
   const [sheet, setSheet] = useState(false);
   const [editing, setEditing] = useState<any>(null);
@@ -181,7 +175,7 @@ function MasterTable({ spec }: { spec: MasterSpec }) {
       for (const f of spec.fields) {
         const v = form[f.key];
         if (v === undefined || v === "") { clean[f.key] = null; continue; }
-        clean[f.key] = f.type === "number" ? Number(v) : v;
+        clean[f.key] = (f.type === "number" || f.type === "paperGsm") ? Number(v) : v;
       }
       return upsertFn({ data: { table: spec.table, id: editing?.id ?? null, values: clean } });
     },
@@ -248,6 +242,16 @@ function MasterTable({ spec }: { spec: MasterSpec }) {
                     <Select value={form[f.key] ?? ""} onValueChange={(v) => setForm({ ...form, [f.key]: v })}>
                       <SelectTrigger><SelectValue placeholder="Select category" /></SelectTrigger>
                       <SelectContent>{(catsQ.data ?? []).map((c: any) => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)}</SelectContent>
+                    </Select>
+                  ) : f.type === "paperType" ? (
+                    <Select value={form[f.key] ?? ""} onValueChange={(v) => setForm({ ...form, [f.key]: v })}>
+                      <SelectTrigger><SelectValue placeholder="Select paper type" /></SelectTrigger>
+                      <SelectContent>{Array.from(new Set(((papersQ.data ?? []) as any[]).map((p) => p.name).filter(Boolean))).map((n) => <SelectItem key={n as string} value={n as string}>{n as string}</SelectItem>)}</SelectContent>
+                    </Select>
+                  ) : f.type === "paperGsm" ? (
+                    <Select value={form[f.key] != null ? String(form[f.key]) : ""} onValueChange={(v) => setForm({ ...form, [f.key]: Number(v) })}>
+                      <SelectTrigger><SelectValue placeholder="Select GSM" /></SelectTrigger>
+                      <SelectContent>{Array.from(new Set(((papersQ.data ?? []) as any[]).map((p) => p.gsm).filter((g) => g != null))).sort((a: any, b: any) => a - b).map((g) => <SelectItem key={String(g)} value={String(g)}>{String(g)}</SelectItem>)}</SelectContent>
                     </Select>
                   ) : f.type === "textarea" ? (
                     <textarea className="min-h-[80px] w-full rounded-md border bg-background px-3 py-2 text-sm" value={form[f.key] ?? ""} onChange={(e) => setForm({ ...form, [f.key]: e.target.value })} />
