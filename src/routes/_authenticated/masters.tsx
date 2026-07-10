@@ -33,12 +33,14 @@ type MasterSpec = {
 const SPECS: MasterSpec[] = [
   {
     table: "products", label: "Products",
-    cols: ["name", "paper_type", "paper_gsm", "active"],
+    cols: ["name", "product_size", "paper_type", "paper_gsm", "active"],
     fields: [
       { key: "category_id", label: "Category", type: "category" },
       { key: "name", label: "Name", required: true },
+      { key: "product_size", label: "Product Size" },
       { key: "paper_type", label: "Paper Type", type: "paperType" },
       { key: "paper_gsm", label: "Paper GSM", type: "paperGsm" },
+      { key: "default_machine_id", label: "Default Machine", type: "machine" },
     ],
   },
   {
