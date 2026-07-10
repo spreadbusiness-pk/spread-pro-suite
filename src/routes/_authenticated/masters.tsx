@@ -22,7 +22,7 @@ import { listBranches } from "@/lib/branches.functions";
 
 export const Route = createFileRoute("/_authenticated/masters")({ component: MastersPage });
 
-type FieldDef = { key: string; label: string; type?: "text" | "number" | "textarea" | "select" | "branch" | "category"; options?: string[]; required?: boolean };
+type FieldDef = { key: string; label: string; type?: "text" | "number" | "textarea" | "select" | "branch" | "category" | "paperType" | "paperGsm"; options?: string[]; required?: boolean };
 type MasterSpec = {
   table: "products" | "product_categories" | "machines" | "papers" | "ctp_plates" | "finishing_options" | "binding_options" | "labour_rates" | "transport_rates";
   label: string;
