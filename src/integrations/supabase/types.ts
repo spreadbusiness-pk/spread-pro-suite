@@ -271,6 +271,77 @@ export type Database = {
         }
         Relationships: []
       }
+      invoices: {
+        Row: {
+          advance_payment: number
+          created_at: string
+          created_by: string | null
+          current_balance: number
+          discount: number
+          due_date: string | null
+          grand_total: number
+          id: string
+          invoice_date: string
+          invoice_no: string
+          order_id: string
+          payment_status: Database["public"]["Enums"]["invoice_payment_status"]
+          received_amount: number
+          remaining_balance: number
+          status: Database["public"]["Enums"]["invoice_status"]
+          subtotal: number
+          terms: string | null
+          updated_at: string
+        }
+        Insert: {
+          advance_payment?: number
+          created_at?: string
+          created_by?: string | null
+          current_balance?: number
+          discount?: number
+          due_date?: string | null
+          grand_total?: number
+          id?: string
+          invoice_date?: string
+          invoice_no: string
+          order_id: string
+          payment_status?: Database["public"]["Enums"]["invoice_payment_status"]
+          received_amount?: number
+          remaining_balance?: number
+          status?: Database["public"]["Enums"]["invoice_status"]
+          subtotal?: number
+          terms?: string | null
+          updated_at?: string
+        }
+        Update: {
+          advance_payment?: number
+          created_at?: string
+          created_by?: string | null
+          current_balance?: number
+          discount?: number
+          due_date?: string | null
+          grand_total?: number
+          id?: string
+          invoice_date?: string
+          invoice_no?: string
+          order_id?: string
+          payment_status?: Database["public"]["Enums"]["invoice_payment_status"]
+          received_amount?: number
+          remaining_balance?: number
+          status?: Database["public"]["Enums"]["invoice_status"]
+          subtotal?: number
+          terms?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "invoices_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       labour_rates: {
         Row: {
           active: boolean
@@ -879,6 +950,8 @@ export type Database = {
         | "delivery"
         | "accountant"
         | "branch_manager"
+      invoice_payment_status: "unpaid" | "partial_paid" | "paid"
+      invoice_status: "draft" | "issued" | "paid" | "cancelled"
       order_priority: "low" | "normal" | "high" | "urgent"
       order_status:
         | "new"
@@ -1033,6 +1106,8 @@ export const Constants = {
         "accountant",
         "branch_manager",
       ],
+      invoice_payment_status: ["unpaid", "partial_paid", "paid"],
+      invoice_status: ["draft", "issued", "paid", "cancelled"],
       order_priority: ["low", "normal", "high", "urgent"],
       order_status: [
         "new",
