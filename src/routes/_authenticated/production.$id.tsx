@@ -40,7 +40,7 @@ function ProductionDetailPage() {
   const [qrDataUrl, setQrDataUrl] = useState<string>("");
 
   useEffect(() => {
-    supabase.from("machines").select("id,name").eq("active", true).then(({ data }) => setMachines((data ?? []) as any[]));
+    (supabase as any).from("machines").select("id,name").then(({ data }: any) => setMachines((data ?? []) as any[]));
   }, []);
 
   useEffect(() => {
