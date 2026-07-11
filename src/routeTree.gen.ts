@@ -17,7 +17,6 @@ import { Route as AuthenticatedUsersRouteImport } from './routes/_authenticated/
 import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
 import { Route as AuthenticatedReportsRouteImport } from './routes/_authenticated/reports'
 import { Route as AuthenticatedQuotationsRouteImport } from './routes/_authenticated/quotations'
-import { Route as AuthenticatedProductionRouteImport } from './routes/_authenticated/production'
 import { Route as AuthenticatedMastersRouteImport } from './routes/_authenticated/masters'
 import { Route as AuthenticatedInventoryRouteImport } from './routes/_authenticated/inventory'
 import { Route as AuthenticatedCustomersRouteImport } from './routes/_authenticated/customers'
@@ -68,11 +67,6 @@ const AuthenticatedQuotationsRoute = AuthenticatedQuotationsRouteImport.update({
   path: '/quotations',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
-const AuthenticatedProductionRoute = AuthenticatedProductionRouteImport.update({
-  id: '/production',
-  path: '/production',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
 const AuthenticatedMastersRoute = AuthenticatedMastersRouteImport.update({
   id: '/masters',
   path: '/masters',
@@ -95,9 +89,9 @@ const AuthenticatedBranchesRoute = AuthenticatedBranchesRouteImport.update({
 } as any)
 const AuthenticatedProductionIndexRoute =
   AuthenticatedProductionIndexRouteImport.update({
-    id: '/',
-    path: '/',
-    getParentRoute: () => AuthenticatedProductionRoute,
+    id: '/production/',
+    path: '/production/',
+    getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
 const AuthenticatedOrdersIndexRoute =
   AuthenticatedOrdersIndexRouteImport.update({
@@ -135,7 +129,6 @@ export interface FileRoutesByFullPath {
   '/customers': typeof AuthenticatedCustomersRoute
   '/inventory': typeof AuthenticatedInventoryRoute
   '/masters': typeof AuthenticatedMastersRoute
-  '/production': typeof AuthenticatedProductionRouteWithChildren
   '/quotations': typeof AuthenticatedQuotationsRoute
   '/reports': typeof AuthenticatedReportsRoute
   '/settings': typeof AuthenticatedSettingsRoute
@@ -175,7 +168,6 @@ export interface FileRoutesById {
   '/_authenticated/customers': typeof AuthenticatedCustomersRoute
   '/_authenticated/inventory': typeof AuthenticatedInventoryRoute
   '/_authenticated/masters': typeof AuthenticatedMastersRoute
-  '/_authenticated/production': typeof AuthenticatedProductionRouteWithChildren
   '/_authenticated/quotations': typeof AuthenticatedQuotationsRoute
   '/_authenticated/reports': typeof AuthenticatedReportsRoute
   '/_authenticated/settings': typeof AuthenticatedSettingsRoute
@@ -198,7 +190,6 @@ export interface FileRouteTypes {
     | '/customers'
     | '/inventory'
     | '/masters'
-    | '/production'
     | '/quotations'
     | '/reports'
     | '/settings'
@@ -237,7 +228,6 @@ export interface FileRouteTypes {
     | '/_authenticated/customers'
     | '/_authenticated/inventory'
     | '/_authenticated/masters'
-    | '/_authenticated/production'
     | '/_authenticated/quotations'
     | '/_authenticated/reports'
     | '/_authenticated/settings'
@@ -315,13 +305,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedQuotationsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/_authenticated/production': {
-      id: '/_authenticated/production'
-      path: '/production'
-      fullPath: '/production'
-      preLoaderRoute: typeof AuthenticatedProductionRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
     '/_authenticated/masters': {
       id: '/_authenticated/masters'
       path: '/masters'
@@ -352,10 +335,10 @@ declare module '@tanstack/react-router' {
     }
     '/_authenticated/production/': {
       id: '/_authenticated/production/'
-      path: '/'
+      path: '/production'
       fullPath: '/production/'
       preLoaderRoute: typeof AuthenticatedProductionIndexRouteImport
-      parentRoute: typeof AuthenticatedProductionRoute
+      parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/orders/': {
       id: '/_authenticated/orders/'
@@ -395,26 +378,11 @@ declare module '@tanstack/react-router' {
   }
 }
 
-interface AuthenticatedProductionRouteChildren {
-  AuthenticatedProductionIndexRoute: typeof AuthenticatedProductionIndexRoute
-}
-
-const AuthenticatedProductionRouteChildren: AuthenticatedProductionRouteChildren =
-  {
-    AuthenticatedProductionIndexRoute: AuthenticatedProductionIndexRoute,
-  }
-
-const AuthenticatedProductionRouteWithChildren =
-  AuthenticatedProductionRoute._addFileChildren(
-    AuthenticatedProductionRouteChildren,
-  )
-
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedBranchesRoute: typeof AuthenticatedBranchesRoute
   AuthenticatedCustomersRoute: typeof AuthenticatedCustomersRoute
   AuthenticatedInventoryRoute: typeof AuthenticatedInventoryRoute
   AuthenticatedMastersRoute: typeof AuthenticatedMastersRoute
-  AuthenticatedProductionRoute: typeof AuthenticatedProductionRouteWithChildren
   AuthenticatedQuotationsRoute: typeof AuthenticatedQuotationsRoute
   AuthenticatedReportsRoute: typeof AuthenticatedReportsRoute
   AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
@@ -425,6 +393,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedOrdersNewRoute: typeof AuthenticatedOrdersNewRoute
   AuthenticatedInvoicesIndexRoute: typeof AuthenticatedInvoicesIndexRoute
   AuthenticatedOrdersIndexRoute: typeof AuthenticatedOrdersIndexRoute
+  AuthenticatedProductionIndexRoute: typeof AuthenticatedProductionIndexRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
@@ -432,7 +401,6 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedCustomersRoute: AuthenticatedCustomersRoute,
   AuthenticatedInventoryRoute: AuthenticatedInventoryRoute,
   AuthenticatedMastersRoute: AuthenticatedMastersRoute,
-  AuthenticatedProductionRoute: AuthenticatedProductionRouteWithChildren,
   AuthenticatedQuotationsRoute: AuthenticatedQuotationsRoute,
   AuthenticatedReportsRoute: AuthenticatedReportsRoute,
   AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
@@ -443,6 +411,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedOrdersNewRoute: AuthenticatedOrdersNewRoute,
   AuthenticatedInvoicesIndexRoute: AuthenticatedInvoicesIndexRoute,
   AuthenticatedOrdersIndexRoute: AuthenticatedOrdersIndexRoute,
+  AuthenticatedProductionIndexRoute: AuthenticatedProductionIndexRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
