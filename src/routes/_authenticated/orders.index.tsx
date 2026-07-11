@@ -17,7 +17,7 @@ import { formatCurrency } from "@/lib/costing";
 export const Route = createFileRoute("/_authenticated/orders/")({ component: OrdersPage });
 
 const STATUS_OPTIONS = [
-  "new","artwork_pending","design","customer_approval","plate_making",
+  "new","artwork_pending","design","customer_approval","approved","plate_making",
   "printing","cutting","lamination","uv","foiling","binding","packing",
   "ready","delivered","cancelled",
 ];

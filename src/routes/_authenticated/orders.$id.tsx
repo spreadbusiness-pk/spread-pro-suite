@@ -27,7 +27,7 @@ import { StatusBadge } from "./orders.index";
 export const Route = createFileRoute("/_authenticated/orders/$id")({ component: OrderDetailPage });
 
 const STATUSES = [
-  "new","artwork_pending","design","customer_approval","plate_making",
+  "new","artwork_pending","design","customer_approval","approved","plate_making",
   "printing","cutting","lamination","uv","foiling","binding","packing",
   "ready","delivered","cancelled",
 ];
