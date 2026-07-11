@@ -752,6 +752,60 @@ export type Database = {
         }
         Relationships: []
       }
+      production_jobs: {
+        Row: {
+          assigned_machine_id: string | null
+          completed_at: string | null
+          created_at: string
+          id: string
+          job_no: string | null
+          order_id: string
+          special_instructions: string | null
+          started_at: string | null
+          status: Database["public"]["Enums"]["production_status"]
+          updated_at: string
+        }
+        Insert: {
+          assigned_machine_id?: string | null
+          completed_at?: string | null
+          created_at?: string
+          id?: string
+          job_no?: string | null
+          order_id: string
+          special_instructions?: string | null
+          started_at?: string | null
+          status?: Database["public"]["Enums"]["production_status"]
+          updated_at?: string
+        }
+        Update: {
+          assigned_machine_id?: string | null
+          completed_at?: string | null
+          created_at?: string
+          id?: string
+          job_no?: string | null
+          order_id?: string
+          special_instructions?: string | null
+          started_at?: string | null
+          status?: Database["public"]["Enums"]["production_status"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "production_jobs_assigned_machine_id_fkey"
+            columns: ["assigned_machine_id"]
+            isOneToOne: false
+            referencedRelation: "machines"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "production_jobs_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       products: {
         Row: {
           active: boolean
@@ -969,6 +1023,17 @@ export type Database = {
         | "ready"
         | "delivered"
         | "cancelled"
+        | "approved"
+      production_status:
+        | "pending"
+        | "ctp_plate_making"
+        | "paper_cutting"
+        | "printing"
+        | "finishing"
+        | "binding"
+        | "packing"
+        | "ready_for_delivery"
+        | "delivered"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -1125,6 +1190,18 @@ export const Constants = {
         "ready",
         "delivered",
         "cancelled",
+        "approved",
+      ],
+      production_status: [
+        "pending",
+        "ctp_plate_making",
+        "paper_cutting",
+        "printing",
+        "finishing",
+        "binding",
+        "packing",
+        "ready_for_delivery",
+        "delivered",
       ],
     },
   },
