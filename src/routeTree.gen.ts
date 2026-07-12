@@ -22,6 +22,7 @@ import { Route as AuthenticatedInventoryRouteImport } from './routes/_authentica
 import { Route as AuthenticatedCustomersRouteImport } from './routes/_authenticated/customers'
 import { Route as AuthenticatedBranchesRouteImport } from './routes/_authenticated/branches'
 import { Route as AuthenticatedProductionIndexRouteImport } from './routes/_authenticated/production.index'
+import { Route as AuthenticatedPaymentsIndexRouteImport } from './routes/_authenticated/payments.index'
 import { Route as AuthenticatedOrdersIndexRouteImport } from './routes/_authenticated/orders.index'
 import { Route as AuthenticatedInvoicesIndexRouteImport } from './routes/_authenticated/invoices.index'
 import { Route as AuthenticatedProductionIdRouteImport } from './routes/_authenticated/production.$id'
@@ -94,6 +95,12 @@ const AuthenticatedProductionIndexRoute =
     path: '/production/',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedPaymentsIndexRoute =
+  AuthenticatedPaymentsIndexRouteImport.update({
+    id: '/payments/',
+    path: '/payments/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedOrdersIndexRoute =
   AuthenticatedOrdersIndexRouteImport.update({
     id: '/orders/',
@@ -146,6 +153,7 @@ export interface FileRoutesByFullPath {
   '/production/$id': typeof AuthenticatedProductionIdRoute
   '/invoices/': typeof AuthenticatedInvoicesIndexRoute
   '/orders/': typeof AuthenticatedOrdersIndexRoute
+  '/payments/': typeof AuthenticatedPaymentsIndexRoute
   '/production/': typeof AuthenticatedProductionIndexRoute
 }
 export interface FileRoutesByTo {
@@ -166,6 +174,7 @@ export interface FileRoutesByTo {
   '/production/$id': typeof AuthenticatedProductionIdRoute
   '/invoices': typeof AuthenticatedInvoicesIndexRoute
   '/orders': typeof AuthenticatedOrdersIndexRoute
+  '/payments': typeof AuthenticatedPaymentsIndexRoute
   '/production': typeof AuthenticatedProductionIndexRoute
 }
 export interface FileRoutesById {
@@ -188,6 +197,7 @@ export interface FileRoutesById {
   '/_authenticated/production/$id': typeof AuthenticatedProductionIdRoute
   '/_authenticated/invoices/': typeof AuthenticatedInvoicesIndexRoute
   '/_authenticated/orders/': typeof AuthenticatedOrdersIndexRoute
+  '/_authenticated/payments/': typeof AuthenticatedPaymentsIndexRoute
   '/_authenticated/production/': typeof AuthenticatedProductionIndexRoute
 }
 export interface FileRouteTypes {
@@ -210,6 +220,7 @@ export interface FileRouteTypes {
     | '/production/$id'
     | '/invoices/'
     | '/orders/'
+    | '/payments/'
     | '/production/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -230,6 +241,7 @@ export interface FileRouteTypes {
     | '/production/$id'
     | '/invoices'
     | '/orders'
+    | '/payments'
     | '/production'
   id:
     | '__root__'
@@ -251,6 +263,7 @@ export interface FileRouteTypes {
     | '/_authenticated/production/$id'
     | '/_authenticated/invoices/'
     | '/_authenticated/orders/'
+    | '/_authenticated/payments/'
     | '/_authenticated/production/'
   fileRoutesById: FileRoutesById
 }
@@ -353,6 +366,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedProductionIndexRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/payments/': {
+      id: '/_authenticated/payments/'
+      path: '/payments'
+      fullPath: '/payments/'
+      preLoaderRoute: typeof AuthenticatedPaymentsIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/orders/': {
       id: '/_authenticated/orders/'
       path: '/orders'
@@ -414,6 +434,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedProductionIdRoute: typeof AuthenticatedProductionIdRoute
   AuthenticatedInvoicesIndexRoute: typeof AuthenticatedInvoicesIndexRoute
   AuthenticatedOrdersIndexRoute: typeof AuthenticatedOrdersIndexRoute
+  AuthenticatedPaymentsIndexRoute: typeof AuthenticatedPaymentsIndexRoute
   AuthenticatedProductionIndexRoute: typeof AuthenticatedProductionIndexRoute
 }
 
@@ -433,6 +454,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedProductionIdRoute: AuthenticatedProductionIdRoute,
   AuthenticatedInvoicesIndexRoute: AuthenticatedInvoicesIndexRoute,
   AuthenticatedOrdersIndexRoute: AuthenticatedOrdersIndexRoute,
+  AuthenticatedPaymentsIndexRoute: AuthenticatedPaymentsIndexRoute,
   AuthenticatedProductionIndexRoute: AuthenticatedProductionIndexRoute,
 }
 
