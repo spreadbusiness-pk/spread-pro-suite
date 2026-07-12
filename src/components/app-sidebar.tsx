@@ -35,6 +35,8 @@ const mainItems = [
   { title: "Customers", url: "/customers", icon: Users },
   { title: "Quotations", url: "/quotations", icon: FileText },
   { title: "Invoices", url: "/invoices", icon: Receipt },
+  { title: "Payments", url: "/payments", icon: Wallet },
+  { title: "Ledger", url: "/ledger", icon: BookOpen },
   { title: "Production", url: "/production", icon: Factory },
   { title: "Inventory", url: "/inventory", icon: Package },
   { title: "Reports", url: "/reports", icon: BarChart3 },
