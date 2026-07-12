@@ -12,6 +12,8 @@ import {
   Settings,
   Building2,
   Database,
+  Wallet,
+  BookOpen,
 } from "lucide-react";
 import {
   Sidebar,
