@@ -734,6 +734,63 @@ export type Database = {
           },
         ]
       }
+      payments: {
+        Row: {
+          amount: number
+          created_at: string
+          created_by: string | null
+          customer_id: string | null
+          id: string
+          invoice_id: string
+          method: Database["public"]["Enums"]["payment_method"]
+          notes: string | null
+          payment_date: string
+          reference_no: string | null
+          updated_at: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          created_by?: string | null
+          customer_id?: string | null
+          id?: string
+          invoice_id: string
+          method?: Database["public"]["Enums"]["payment_method"]
+          notes?: string | null
+          payment_date?: string
+          reference_no?: string | null
+          updated_at?: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          created_by?: string | null
+          customer_id?: string | null
+          id?: string
+          invoice_id?: string
+          method?: Database["public"]["Enums"]["payment_method"]
+          notes?: string | null
+          payment_date?: string
+          reference_no?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payments_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "customers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "payments_invoice_id_fkey"
+            columns: ["invoice_id"]
+            isOneToOne: false
+            referencedRelation: "invoices"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       product_categories: {
         Row: {
           created_at: string
@@ -1024,6 +1081,13 @@ export type Database = {
         | "delivered"
         | "cancelled"
         | "approved"
+      payment_method:
+        | "cash"
+        | "bank_transfer"
+        | "cheque"
+        | "jazzcash"
+        | "easypaisa"
+        | "online_transfer"
       production_status:
         | "pending"
         | "ctp_plate_making"
@@ -1191,6 +1255,14 @@ export const Constants = {
         "delivered",
         "cancelled",
         "approved",
+      ],
+      payment_method: [
+        "cash",
+        "bank_transfer",
+        "cheque",
+        "jazzcash",
+        "easypaisa",
+        "online_transfer",
       ],
       production_status: [
         "pending",
