@@ -271,6 +271,81 @@ export type Database = {
         }
         Relationships: []
       }
+      inventory_items: {
+        Row: {
+          active: boolean
+          barcode: string | null
+          batch_number: string | null
+          branch_id: string | null
+          brand: string | null
+          category: Database["public"]["Enums"]["inventory_category"]
+          created_at: string
+          created_by: string | null
+          current_stock: number
+          id: string
+          minimum_stock: number
+          name: string
+          opening_stock: number
+          paper_gsm: number | null
+          paper_type: string | null
+          purchase_rate: number
+          qr_code: string | null
+          remarks: string | null
+          size: string | null
+          supplier: string | null
+          unit: string
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          barcode?: string | null
+          batch_number?: string | null
+          branch_id?: string | null
+          brand?: string | null
+          category: Database["public"]["Enums"]["inventory_category"]
+          created_at?: string
+          created_by?: string | null
+          current_stock?: number
+          id?: string
+          minimum_stock?: number
+          name: string
+          opening_stock?: number
+          paper_gsm?: number | null
+          paper_type?: string | null
+          purchase_rate?: number
+          qr_code?: string | null
+          remarks?: string | null
+          size?: string | null
+          supplier?: string | null
+          unit?: string
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          barcode?: string | null
+          batch_number?: string | null
+          branch_id?: string | null
+          brand?: string | null
+          category?: Database["public"]["Enums"]["inventory_category"]
+          created_at?: string
+          created_by?: string | null
+          current_stock?: number
+          id?: string
+          minimum_stock?: number
+          name?: string
+          opening_stock?: number
+          paper_gsm?: number | null
+          paper_type?: string | null
+          purchase_rate?: number
+          qr_code?: string | null
+          remarks?: string | null
+          size?: string | null
+          supplier?: string | null
+          unit?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       invoices: {
         Row: {
           advance_payment: number
@@ -809,6 +884,48 @@ export type Database = {
         }
         Relationships: []
       }
+      product_inventory_bom: {
+        Row: {
+          created_at: string
+          id: string
+          inventory_item_id: string
+          notes: string | null
+          product_id: string
+          qty_per_unit: number
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          inventory_item_id: string
+          notes?: string | null
+          product_id: string
+          qty_per_unit?: number
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          inventory_item_id?: string
+          notes?: string | null
+          product_id?: string
+          qty_per_unit?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "product_inventory_bom_inventory_item_id_fkey"
+            columns: ["inventory_item_id"]
+            isOneToOne: false
+            referencedRelation: "inventory_items"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "product_inventory_bom_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       production_jobs: {
         Row: {
           assigned_machine_id: string | null
@@ -953,6 +1070,56 @@ export type Database = {
         }
         Relationships: []
       }
+      stock_movements: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          id: string
+          item_id: string
+          movement_date: string
+          movement_type: Database["public"]["Enums"]["stock_movement_type"]
+          quantity: number
+          reason: string | null
+          reference_id: string | null
+          reference_no: string | null
+          reference_type: string | null
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          item_id: string
+          movement_date?: string
+          movement_type: Database["public"]["Enums"]["stock_movement_type"]
+          quantity: number
+          reason?: string | null
+          reference_id?: string | null
+          reference_no?: string | null
+          reference_type?: string | null
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          item_id?: string
+          movement_date?: string
+          movement_type?: Database["public"]["Enums"]["stock_movement_type"]
+          quantity?: number
+          reason?: string | null
+          reference_id?: string | null
+          reference_no?: string | null
+          reference_type?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "stock_movements_item_id_fkey"
+            columns: ["item_id"]
+            isOneToOne: false
+            referencedRelation: "inventory_items"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       transport_rates: {
         Row: {
           active: boolean
@@ -1050,6 +1217,7 @@ export type Database = {
         Returns: boolean
       }
       is_admin: { Args: { _user_id: string }; Returns: boolean }
+      recompute_item_stock: { Args: { _item_id: string }; Returns: undefined }
     }
     Enums: {
       app_role:
@@ -1061,6 +1229,15 @@ export type Database = {
         | "delivery"
         | "accountant"
         | "branch_manager"
+      inventory_category:
+        | "paper"
+        | "ctp_plates"
+        | "ink"
+        | "lamination"
+        | "finishing"
+        | "binding"
+        | "packaging"
+        | "other"
       invoice_payment_status: "unpaid" | "partial_paid" | "paid"
       invoice_status: "draft" | "issued" | "paid" | "cancelled"
       order_priority: "low" | "normal" | "high" | "urgent"
@@ -1098,6 +1275,7 @@ export type Database = {
         | "packing"
         | "ready_for_delivery"
         | "delivered"
+      stock_movement_type: "in" | "out" | "adjustment"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -1235,6 +1413,16 @@ export const Constants = {
         "accountant",
         "branch_manager",
       ],
+      inventory_category: [
+        "paper",
+        "ctp_plates",
+        "ink",
+        "lamination",
+        "finishing",
+        "binding",
+        "packaging",
+        "other",
+      ],
       invoice_payment_status: ["unpaid", "partial_paid", "paid"],
       invoice_status: ["draft", "issued", "paid", "cancelled"],
       order_priority: ["low", "normal", "high", "urgent"],
@@ -1275,6 +1463,7 @@ export const Constants = {
         "ready_for_delivery",
         "delivered",
       ],
+      stock_movement_type: ["in", "out", "adjustment"],
     },
   },
 } as const
