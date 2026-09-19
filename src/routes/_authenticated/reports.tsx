@@ -66,7 +66,7 @@ function ReportsPage() {
   const fetchBranches = useServerFn(listBranches);
   const fetchCustomers = useServerFn(listCustomers);
 
-  const branchQ = useQuery({ queryKey: ["report-branches"], queryFn: () => fetchBranches({ data: {} }) });
+  const branchQ = useQuery({ queryKey: ["report-branches"], queryFn: () => fetchBranches() });
   const custQ = useQuery({ queryKey: ["report-customers"], queryFn: () => fetchCustomers({ data: { pageSize: 500 } }) });
   const reportQ = useQuery({
     queryKey: ["report", from, to, branchId, customerId],
