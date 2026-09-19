@@ -16,7 +16,6 @@ import { Route as AuthenticatedIndexRouteImport } from './routes/_authenticated/
 import { Route as AuthenticatedUsersRouteImport } from './routes/_authenticated/users'
 import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
 import { Route as AuthenticatedReportsRouteImport } from './routes/_authenticated/reports'
-import { Route as AuthenticatedQuotationsRouteImport } from './routes/_authenticated/quotations'
 import { Route as AuthenticatedMastersRouteImport } from './routes/_authenticated/masters'
 import { Route as AuthenticatedInventoryRouteImport } from './routes/_authenticated/inventory'
 import { Route as AuthenticatedCustomersRouteImport } from './routes/_authenticated/customers'
@@ -63,11 +62,6 @@ const AuthenticatedSettingsRoute = AuthenticatedSettingsRouteImport.update({
 const AuthenticatedReportsRoute = AuthenticatedReportsRouteImport.update({
   id: '/reports',
   path: '/reports',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
-const AuthenticatedQuotationsRoute = AuthenticatedQuotationsRouteImport.update({
-  id: '/quotations',
-  path: '/quotations',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedMastersRoute = AuthenticatedMastersRouteImport.update({
@@ -150,7 +144,6 @@ export interface FileRoutesByFullPath {
   '/customers': typeof AuthenticatedCustomersRoute
   '/inventory': typeof AuthenticatedInventoryRoute
   '/masters': typeof AuthenticatedMastersRoute
-  '/quotations': typeof AuthenticatedQuotationsRoute
   '/reports': typeof AuthenticatedReportsRoute
   '/settings': typeof AuthenticatedSettingsRoute
   '/users': typeof AuthenticatedUsersRoute
@@ -171,7 +164,6 @@ export interface FileRoutesByTo {
   '/customers': typeof AuthenticatedCustomersRoute
   '/inventory': typeof AuthenticatedInventoryRoute
   '/masters': typeof AuthenticatedMastersRoute
-  '/quotations': typeof AuthenticatedQuotationsRoute
   '/reports': typeof AuthenticatedReportsRoute
   '/settings': typeof AuthenticatedSettingsRoute
   '/users': typeof AuthenticatedUsersRoute
@@ -195,7 +187,6 @@ export interface FileRoutesById {
   '/_authenticated/customers': typeof AuthenticatedCustomersRoute
   '/_authenticated/inventory': typeof AuthenticatedInventoryRoute
   '/_authenticated/masters': typeof AuthenticatedMastersRoute
-  '/_authenticated/quotations': typeof AuthenticatedQuotationsRoute
   '/_authenticated/reports': typeof AuthenticatedReportsRoute
   '/_authenticated/settings': typeof AuthenticatedSettingsRoute
   '/_authenticated/users': typeof AuthenticatedUsersRoute
@@ -220,7 +211,6 @@ export interface FileRouteTypes {
     | '/customers'
     | '/inventory'
     | '/masters'
-    | '/quotations'
     | '/reports'
     | '/settings'
     | '/users'
@@ -241,7 +231,6 @@ export interface FileRouteTypes {
     | '/customers'
     | '/inventory'
     | '/masters'
-    | '/quotations'
     | '/reports'
     | '/settings'
     | '/users'
@@ -264,7 +253,6 @@ export interface FileRouteTypes {
     | '/_authenticated/customers'
     | '/_authenticated/inventory'
     | '/_authenticated/masters'
-    | '/_authenticated/quotations'
     | '/_authenticated/reports'
     | '/_authenticated/settings'
     | '/_authenticated/users'
@@ -335,13 +323,6 @@ declare module '@tanstack/react-router' {
       path: '/reports'
       fullPath: '/reports'
       preLoaderRoute: typeof AuthenticatedReportsRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/quotations': {
-      id: '/_authenticated/quotations'
-      path: '/quotations'
-      fullPath: '/quotations'
-      preLoaderRoute: typeof AuthenticatedQuotationsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/masters': {
@@ -443,7 +424,6 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedCustomersRoute: typeof AuthenticatedCustomersRoute
   AuthenticatedInventoryRoute: typeof AuthenticatedInventoryRoute
   AuthenticatedMastersRoute: typeof AuthenticatedMastersRoute
-  AuthenticatedQuotationsRoute: typeof AuthenticatedQuotationsRoute
   AuthenticatedReportsRoute: typeof AuthenticatedReportsRoute
   AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
   AuthenticatedUsersRoute: typeof AuthenticatedUsersRoute
@@ -464,7 +444,6 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedCustomersRoute: AuthenticatedCustomersRoute,
   AuthenticatedInventoryRoute: AuthenticatedInventoryRoute,
   AuthenticatedMastersRoute: AuthenticatedMastersRoute,
-  AuthenticatedQuotationsRoute: AuthenticatedQuotationsRoute,
   AuthenticatedReportsRoute: AuthenticatedReportsRoute,
   AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
   AuthenticatedUsersRoute: AuthenticatedUsersRoute,
