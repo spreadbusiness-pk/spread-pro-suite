@@ -12,12 +12,21 @@ import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
 
 export const Route = createFileRoute("/auth")({
-  ssr: false,
   beforeLoad: async () => {
     const { data } = await supabase.auth.getUser();
     if (data.user) throw redirect({ to: "/" });
   },
   component: AuthPage,
+  head: () => ({
+    meta: [
+      { title: "Sign in · Spread Business ERP" },
+      { name: "description", content: "Secure sign in for Spread Business ERP." },
+      { property: "og:title", content: "Sign in · Spread Business ERP" },
+      { property: "og:description", content: "Secure sign in for Spread Business ERP." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
+    ],
+  }),
 });
 
 const emailSchema = z.string().trim().email("Enter a valid email").max(200);
