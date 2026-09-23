@@ -37,7 +37,12 @@ export const createBranch = createServerFn({ method: "POST" })
       .insert(payload)
       .select("*")
       .single();
-    if (error) throw new Error(error.message);
+    if (error) {
+      if (/row-level security/i.test(error.message)) {
+        throw new Error("You do not have permission to create branches. Only an admin can add a branch.");
+      }
+      throw new Error(error.message);
+    }
     return row;
   });
 
