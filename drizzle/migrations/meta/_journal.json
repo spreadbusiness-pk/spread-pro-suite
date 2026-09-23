@@ -8,6 +8,13 @@
       "when": 1789805805547,
       "tag": "0000_restrict_payments_products_company_settings_access",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1790155187157,
+      "tag": "0001_fix_branches_read_policy",
+      "breakpoints": true
     }
   ]
 }
