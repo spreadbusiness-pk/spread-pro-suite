@@ -15,6 +15,13 @@
       "when": 1790155187157,
       "tag": "0001_fix_branches_read_policy",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1790243733742,
+      "tag": "0002_restrict_bom_stock_transport_reads",
+      "breakpoints": true
     }
   ]
 }
