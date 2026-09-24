@@ -22,6 +22,13 @@
       "when": 1790243733742,
       "tag": "0002_restrict_bom_stock_transport_reads",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1790244013919,
+      "tag": "0003_restrict_inventory_items_read",
+      "breakpoints": true
     }
   ]
 }
