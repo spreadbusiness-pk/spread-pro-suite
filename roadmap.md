@@ -4,3 +4,4 @@
 - [x] Remove the Quotations section
 - [ ] Verify Reports and navigation in the preview
 - [ ] Address required security findings without changing intended staff workflows
+- [x] Prevent branch permission failures from opening the app error panel

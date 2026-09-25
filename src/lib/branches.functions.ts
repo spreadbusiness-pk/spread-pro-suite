@@ -39,11 +39,11 @@ export const createBranch = createServerFn({ method: "POST" })
       .single();
     if (error) {
       if (/row-level security/i.test(error.message)) {
-        throw new Error("You do not have permission to create branches. Only an admin can add a branch.");
+        return { ok: false as const, error: "You do not have permission to create branches. Only an admin can add a branch." };
       }
-      throw new Error(error.message);
+      return { ok: false as const, error: error.message };
     }
-    return row;
+    return { ok: true as const, row };
   });
 
 export const updateBranch = createServerFn({ method: "POST" })
@@ -56,8 +56,8 @@ export const updateBranch = createServerFn({ method: "POST" })
       .eq("id", data.id)
       .select("*")
       .single();
-    if (error) throw new Error(error.message);
-    return row;
+    if (error) return { ok: false as const, error: error.message };
+    return { ok: true as const, row };
   });
 
 export const deleteBranch = createServerFn({ method: "POST" })
@@ -65,8 +65,8 @@ export const deleteBranch = createServerFn({ method: "POST" })
   .inputValidator((d: unknown) => z.object({ id: z.string().uuid() }).parse(d))
   .handler(async ({ data, context }) => {
     const { error } = await (context.supabase as any).from("branches").delete().eq("id", data.id);
-    if (error) throw new Error(error.message);
-    return { ok: true };
+    if (error) return { ok: false as const, error: error.message };
+    return { ok: true as const };
   });
 
 export const toggleBranch = createServerFn({ method: "POST" })
@@ -77,6 +77,6 @@ export const toggleBranch = createServerFn({ method: "POST" })
       .from("branches")
       .update({ active: data.active, status: data.active ? "active" : "inactive" })
       .eq("id", data.id);
-    if (error) throw new Error(error.message);
-    return { ok: true };
+    if (error) return { ok: false as const, error: error.message };
+    return { ok: true as const };
   });
