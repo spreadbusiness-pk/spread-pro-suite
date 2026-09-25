@@ -44,7 +44,11 @@ function BranchesPage() {
 
   const save = useMutation({
     mutationFn: async () => editing ? updateFn({ data: { id: editing.id, values: form } }) : createFn({ data: form }),
-    onSuccess: () => {
+    onSuccess: (result) => {
+      if (!result.ok) {
+        toast.error(result.error);
+        return;
+      }
       qc.invalidateQueries({ queryKey: ["branches"] });
       toast.success(editing ? "Branch updated" : "Branch created");
       setSheet(false); setEditing(null); setForm(empty);
@@ -53,12 +57,19 @@ function BranchesPage() {
   });
   const del = useMutation({
     mutationFn: (id: string) => deleteFn({ data: { id } }),
-    onSuccess: () => { qc.invalidateQueries({ queryKey: ["branches"] }); toast.success("Branch deleted"); setToDelete(null); },
+    onSuccess: (result) => {
+      if (!result.ok) { toast.error(result.error); return; }
+      qc.invalidateQueries({ queryKey: ["branches"] }); toast.success("Branch deleted"); setToDelete(null);
+    },
     onError: (e: any) => toast.error(e?.message ?? "Failed"),
   });
   const tog = useMutation({
     mutationFn: ({ id, active }: { id: string; active: boolean }) => toggleFn({ data: { id, active } }),
-    onSuccess: () => qc.invalidateQueries({ queryKey: ["branches"] }),
+    onSuccess: (result) => {
+      if (!result.ok) { toast.error(result.error); return; }
+      qc.invalidateQueries({ queryKey: ["branches"] });
+    },
+    onError: (e: any) => toast.error(e?.message ?? "Failed to update branch"),
   });
 
   const openNew = () => { setEditing(null); setForm(empty); setSheet(true); };

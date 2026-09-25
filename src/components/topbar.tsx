@@ -17,6 +17,7 @@ import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { useTheme } from "@/components/theme-provider";
 import { Badge } from "@/components/ui/badge";
+import { toast } from "sonner";
 
 const ROLE_LABEL: Record<string, string> = {
   super_admin: "Super Admin",
@@ -42,6 +43,7 @@ export function Topbar() {
       await supabase.auth.signOut();
     },
     onSuccess: () => navigate({ to: "/auth", replace: true }),
+    onError: () => toast.error("Unable to sign out. Please try again."),
   });
 
   const name = data?.profile?.full_name || data?.email || "User";
