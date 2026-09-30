@@ -66,7 +66,9 @@ function NewOrderPage() {
         const paper = product
           ? papers.find(
               (p) =>
-                (product.paper_type ? p.name === product.paper_type : true) &&
+                (product.paper_type
+                  ? String(p.name ?? "").trim().toLowerCase() === String(product.paper_type).trim().toLowerCase()
+                  : true) &&
                 (product.paper_gsm ? Number(p.gsm) === Number(product.paper_gsm) : true),
             ) ?? null
           : null;
